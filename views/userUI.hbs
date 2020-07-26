@@ -1,0 +1,71 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg h-100 border border-warning">
+    <!--NAVBAR-->
+    <nav class='col-12 navbar navbar-expand-sm navbar-dark mt-5'>
+        <!--CONTAINER-->
+        <div class="container navbar-effect">
+            <a class="navbar-brand ml-3" href="#">ASAP</a>
+            <ul class="navbar-nav mr-3">
+                <li class="nav-item">
+                    <a class="nav-link " href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">LOGOUT</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+    <!--OTP-->
+    <div class="row m-1 p-3">
+        <div class="col-5 text-center text-white">
+            <div  class="row p-0" id="place-container">
+                {{#each places}}
+                    <div style="" class="col-6 item-effect">
+                        <div class="h1">{{this.name}}</div>
+                        <div class="h4" id="{{this._id}}">{{this.count}}</div>
+                    </div>
+                {{/each}}                
+            </div>
+        </div>
+        <div class="col-7">
+            <form action="" method="POST">
+            <div class="row">
+                <div style="height: 100px" id="otp" class="col-7 offset-2 text-center text-white effect h1 pt-4 ">{{OTP}}<br><small style="font-size:16px">{{name}}</small></div>
+                    <div class="col-5 offset-2 p-0">
+                    <select id="place-list" name="place" class="form-control selectbox">
+                        {{#each places}}
+                        <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}  
+                    </select>
+                    </div>
+                    <div id="generate-btn" class="col-2 text-white">
+                        <input type="submit" value="GENERATE" style="border-radius: 25px" class="btn btn-outline-light p-2 px-3">
+                    </div>
+
+                
+            </div>
+            </form>
+            <div class="col-3 offset-4">
+                    <button id="exit-btn" style="border-radius:25px" class="btn btn-outline-light btn-block view">Exit</button>
+                </div>
+        </div>
+
+
+
+
+
+    </div>
+</body>
+<script src="/js/user-client.js"></script>
+</html>

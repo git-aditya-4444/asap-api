@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg">
+          <a style="border-radius:25px;position: absolute;right:0" href="/" class="btn btn-outline-light mt-4 mr-5">HOME</a>
+    <div style="margin-top:50px" class="row mx-5">
+    <div  class="col-4 offset-4">
+        <div class="container">
+            <form action="" method="post">
+               <h3 class="text-center text-light">REGISTER</h3>
+               
+                <div class="row mt-3 mb-3">
+                    <div class="col-4 offset-2 p-1 text-center h5"><a style="border-radius: 25px" class="w-100 btn btn-outline-light activee" href="/register/user">User</a></div>
+                    <div class="col-4 offset-1 p-1 text-center h5"><a style="border-radius: 25px" class="w-100 btn btn-outline-light" href="/register/admin">Admin</a></div>
+                </div>
+                
+                
+                <div class="form-group">
+                    {{!-- {{#if error}}
+                    <small class="pl-3 form-text text-white">{{error}}</small>{{/if}} --}}
+                    <label class="h5 pl-3 text-white" for="name">Name</label>
+                    <input style="border-radius: 25px" type="text" name="name" class="form-control input-style" minlength="6" required>
+                </div>
+                <div class="form-group">
+                    <label class="h5 pl-3 text-white" for="email">Email</label>
+                    <input style="border-radius: 25px" type="email" name="email" class="form-control input-style" required>
+                    
+                </div>                
+                <div class="form-group">
+                    <label class="h5 pl-3 text-white" for="password">Password</label>
+                    <input style="border-radius: 25px" type="password" name="password" class="form-control input-style" required>
+                </div>
+                <div class="form-group">
+                <select class="form-control form-control-sm selectbox " name="belongsTo" required>
+                    <option value="">SELECT A PLACE</option>
+                    {{#each list}}
+                    <option value="{{this._id}}">{{this.name}}</option>
+                    {{/each}}
+                </select>
+                </div>
+                <div class="text-center">
+                    <input style="" type="submit" value="LOGIN" class="btn btn-outline-light m-3 w-50 button-effect">
+                </div>
+                
+            </form>
+            <small class="form-text text-center"><a class="text-white" href="/login/user">already have an account?login</a></small>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
+
+
+    
+
+    

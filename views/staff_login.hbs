@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg">
+    <div style="margin-top:50px" class="row mx-5">
+    <div  class="col-4 offset-4">
+        <div class="container">
+            <form action="" method="post">
+               <h3 class="text-center text-light">STAFF ONLY</h3>
+
+                <div class="form-group mt-5">
+                    <label class="h5 pl-3 text-white" for="name">SELECT University</label>
+                    <select name="belongsTo" class="form-control" id="">
+                        <option value="">--Select--</option>
+                        {{#each org_list}}
+                        <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>                
+                <div class="form-group">
+                    <label class="h5 pl-3 text-white" for="accessCode">Password</label>
+                    <input style="border-radius: 25px" type="password" name="accessCode" class="form-control input-style">
+                </div>
+
+                <div class="text-center">
+                    <input style="border-radius:25px" type="submit" value="LOGIN" class="btn btn-outline-light m-3 w-50">
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
+
+
+    
