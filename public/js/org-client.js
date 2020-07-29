@@ -3,7 +3,7 @@ const del = document.querySelector('#scanner-list')
 if(del !== null)
 {
   del.addEventListener('click', function(e) {
-    const id=e.target.parentNode.parentNode.parentNode.id
+    const id=e.target.parentNode.parentNode.id
     
       fetch(`/manage/scanner/${id}`, {method:'DELETE'})
         .then(function(response) {
@@ -27,10 +27,9 @@ const group = document.getElementById('req-list');
 if(group !== null){
   group.addEventListener('click', function(e) {
 
-    if(e.target.className == "ion-ios-checkmark-outline")
+    if(e.target.className.includes("ok"))
     {
-    const id=e.target.parentNode.parentNode.id
-    
+    const id=e.target.parentNode.id
       fetch(`/manage/requests/${id}`, {method:'PATCH'})
         .then(function(response) {
           if(response) {
@@ -43,9 +42,9 @@ if(group !== null){
           console.log(error);
         });
     }
-    if(e.target.className == "ion-ios-close-outline")
+    if(e.target.className.includes("del"))
     {
-      const id=e.target.parentNode.parentNode.id
+      const id=e.target.parentNode.id
       fetch(`/manage/requests/${id}`, {method:'DELETE'})
         .then(function(response) {
           if(response) {
@@ -90,7 +89,7 @@ const for_reset_btn=document.querySelector('#places-list')
 if(for_reset_btn){
   for_reset_btn.addEventListener('click',(e)=>{
     
-    if(e.target.nodeName === 'BUTTON')
+    if(e.target.className.includes('ok'))
     {
       const id=e.target.parentNode.id
       fetch(`/manage/places/${id}`,{method: 'PATCH'})
@@ -99,9 +98,9 @@ if(for_reset_btn){
         console.log(e)
       })
     }
-    if(e.target.nodeName === 'I')
+    if(e.target.className.includes('del'))
     {
-    const id=e.target.parentNode.parentNode.id
+    const id=e.target.parentNode.id
      fetch(`/manage/places/${id}`,{method: 'DELETE'})
      .then((res)=>{
        location.reload()

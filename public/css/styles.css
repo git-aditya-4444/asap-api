@@ -183,8 +183,6 @@
 }
 
 .ok,.del{
-    font-size: 22px;
-    background: none;
     border: none;
     cursor: pointer;
     display: inline-block;
@@ -195,7 +193,6 @@
 
 .litem:hover .ok,.litem:hover .del{
     float:right;
-    color:white;
     display:inline; 
 }
 
@@ -212,17 +209,8 @@
 }
 
 
-.txt{
-    font-size: 20px;
-    margin-bottom: 20px;
-    display:none;
-    border:solid 1px white;
-    vertical-align: center
-}
 
-.del:hover .txt,.ok:hover .txt{
-    display:inline
-}
+
 /*------------------------staff----------------------------------*/
 
 .trow:hover{
@@ -231,24 +219,9 @@
 
 td:hover .del{
         float:right;
-    color:white;
     display:inline;
 }
-/*--------------manage places-------------------------------------*/
-.reset{
-    display:none;
-    border-radius: 25px;
-    margin-right:10px
-}
 
-.litem:hover .reset{
-    display:inline;
-    float:right;
-}
-
-.reset:active{
-    transform: translateY(2px);
-}
 
 
 
