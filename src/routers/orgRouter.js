@@ -142,20 +142,8 @@ router.post('/admin/account',toLogin,async(req,res)=>{
     }
 })
 
-//ajax stuff............
-router.post('/scanner',denied,async(req,res)=>{
-    const there=await Otp.findOne(req.body)
-    if(there)
-    {
-        const updated=await Org.updateOne({'places._id':req.session.scanning},{$inc:{
-            'places.$.count':1
-        }})
 
-        const activeotp=await Otp.findOneAndUpdate({value:req.body.value},{$set:{active:true}})
-        
-        res.send(updated)
-    }
-})
+
 //active info
 router.get('/places/adminUI',async(req,res)=>{
     try{

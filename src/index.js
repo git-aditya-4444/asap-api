@@ -24,6 +24,7 @@ app.use(session({
     saveUninitialized:false,
     secret:process.env.SECRET,
     cookie:{
+        secure: process.env.NODE_ENV == "production" ? true : false ,
         maxAge:1000*60*20,
         sameSite:true,
         secure:false,

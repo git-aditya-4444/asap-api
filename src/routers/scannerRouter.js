@@ -86,6 +86,30 @@ res.send(e)
 }
 })
 
+router.post('/scanner',denied,async(req,res)=>{
+try{
+    const there=await Otp.findOne(req.body)
+    if(there)
+    {
+        const updated=await Org.updateOne({'places._id':req.session.scanning},{$inc:{
+            'places.$.count':1
+        }})
+
+        const activeotp=await Otp.findOneAndUpdate({value:req.body.value},{$set:{active:true}})
+        
+        const org=await Org.findById(req.session.adminID)
+        const place=org.places.find(x=>x._id==req.session.scanning)
+        return res.render('scanner',{place,err:"Access Granted",bg:"bg-success"})
+    }
+    throw new Error()
+}catch(e)
+{
+    const org=await Org.findById(req.session.adminID)
+    const place=org.places.find(x=>x._id==req.session.scanning)
+    return res.render('scanner',{place,err:"Access Denied",bg:"bg-danger"}) 
+}
+})
+
 
 //############################# USER related SCANNING PART
 
