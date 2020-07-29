@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-const staffSchema= new mongoose.Schema({
+const scannerSchema= new mongoose.Schema({
     belongsTo:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
@@ -25,6 +25,6 @@ const staffSchema= new mongoose.Schema({
 
 
 
-const Staff=mongoose.model('Staff',staffSchema)
+const Scanner=mongoose.model('Staff',scannerSchema)
 
-module.exports = Staff
+module.exports = Scanner

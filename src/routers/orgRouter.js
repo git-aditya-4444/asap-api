@@ -2,7 +2,7 @@ const express = require('express')
 const Org=require('../models/org')
 const User=require('../models/user')
 const Otp=require('../models/otp')
-const Staff=require('../models/staff')
+const Staff=require('../models/scanner')
 const {toLogin,toHome,denied}=require('../authenticate/orgAuth')
 
 const router = new express.Router()
@@ -18,7 +18,12 @@ router.post('/register/admin',toHome,async (req,res)=>{
         res.status(200).redirect('/home/admin')
     }catch(e)
     {
-        res.status(400).send(e)
+        if(Object.keys(e.keyPattern).includes('email'))
+        {
+            return res.render('adminSignup',{err:'email ID has already been taken'})
+        }
+        
+        res.render('adminSignup')
     }
 
 })
@@ -66,105 +71,75 @@ router.post('/home/admin',toLogin,async (req,res)=>{
     }
 })
 
+//################################## USER requests
 router.get('/manage/requests',toLogin,async(req,res)=>{
     const org=await Org.findById(req.session.adminID)
     await org.populate('users').execPopulate()
     const info=org.users.filter(x=>x.access===false)
     res.render('manage',{info})
-    // res.render('manage')
 })
 
 router.delete('/manage/requests/:delid',toLogin,async(req,res)=>{
     const user=await User.findByIdAndDelete(req.params.delid)
-    res.redirect('/manage/requests')
+    res.send("ok")
 
 })
 
 router.patch('/manage/requests/:uid',toLogin,async(req,res)=>{
+try{
     const id=req.params.uid 
-    console.log('in patch')  
     const user=await User.findByIdAndUpdate(id,{$set:{access:true}})
     user.save()
-    res.redirect('/manage/requests')
-
-
-})
-
-//scanner RELATED------------------------------------------------------------------
-
-router.get('/manage/staff',toLogin,async (req,res)=>{
-try{
-    const staffArr= await Staff.find({})
     const org=await Org.findById(req.session.adminID)
-    const {places}=org
-    
-    const scanners=await Staff.find({belongsTo:req.session.adminID})
-    res.render('manage_staff',{places,scanners})
-    
-
+    res.send("ok")
 }catch(e){
-res.send('bye')
+    res.send(e)
 }
 })
 
-router.post('/manage/staff',toLogin,async(req,res)=>{
-    const input=req.body
+router.get('/manage/places',toLogin,async(req,res)=>{
     const org=await Org.findById(req.session.adminID)
     const places=org.places
-    const place=places.find(x=>x._id.toString()===req.body.scanning)
-console.log(place.name)
-    const staff=new Staff({...input,belongsTo:req.session.adminID,name:place.name})
-    staff.save()
-    res.redirect('/manage/staff')
+    res.render('manage_places',{places})
+})
+//###################### manage places
+router.patch('/manage/places/:resid',toLogin,async(req,res)=>{
+    const updated=await Org.updateOne({'places._id':req.params.resid},{$set:{
+        'places.$.count':0
+    }})
+    console.log(updated)
+    res.send(updated)
 })
 
+router.delete('/manage/places/:delid',toLogin,async(req,res)=>{
+    const deleted=await Org.updateOne({'places._id':req.params.delid},{$pull:{
+        'places':{"_id":req.params.delid}
+    }})
+    console.log(deleted)
+    res.send(deleted)
+})
 
-router.delete('/manage/staff/:delid',toLogin,async(req,res)=>{
-    const deleted=await Staff.findByIdAndDelete(req.params.delid)
-    res.redirect('/manage/requests')
+//######################### account settings
+router.get('/admin/account',toLogin,(req,res)=>{
+
+    res.render('admin-account')
 
 })
 
-
-
-
-
-// login scanner
-
-router.get('/login/staff',async(req,res)=>{
-    const org=await Org.find({})
-    const org_list=[]
-    org.forEach(x=>{
-        ({_id,name}=x)
-        org_list.push({_id,name})
-    })
-    res.render('staff_login',{org_list})
-})
-
-router.post('/login/staff',async(req,res)=>{
-try{
-    const there=await Staff.findOne(req.body)
-    if(there){
-        req.session.adminID=there.belongsTo
-        req.session.scanning=there.scanning
-        return res.redirect('/scanner')
+router.post('/admin/account',toLogin,async(req,res)=>{
+    try{
+        if(req.body.new !== req.body.new2)
+        {
+            throw new Error('passwords did not match')
+        }
+        const org=await Org.findById(req.session.adminID)
+        await org.changePassword(req.body.old,req.body.new)
+        org.save()
+        res.render('accountsettings',{okay:"changed successfully"})
+    }catch(e){
+        console.log()
+        res.render('accountsettings',{msg:e.toString().split(": ")[1]})
     }
-    res.send('you can do it')
-}catch(e)
-{
-res.send('bye')
-}
-
-})
-
-router.get('/scanner',denied,async(req,res)=>{
-try{
-    const org=await Org.findById(req.session.adminID)
-    const place=org.places.find(x=>x._id==req.session.scanning)
-    res.render('scanner',{place})
-}catch(e){
-res.send(e)
-}
 })
 
 //ajax stuff............
@@ -181,6 +156,18 @@ router.post('/scanner',denied,async(req,res)=>{
         res.send(updated)
     }
 })
+//active info
+router.get('/places/adminUI',async(req,res)=>{
+    try{
+    const id=req.session.adminID
+    const org=await Org.findById(id)
+    const places=org.places
+    res.send(places)
+    }catch(e)
+    {
+        res.send(e)
+    }
+    })
 
 
 

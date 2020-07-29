@@ -62,6 +62,18 @@ userSchema.statics.findByCredentials= async function(email,pass){
     return user
 }
 
+    userSchema.methods.changePassword=async function(oldpass,newpass){
+    const user=this
+    const isMatch = await bcrypt.compare(oldpass,user.password)
+    if(!isMatch)
+    {
+        throw new Error('Old password is wrong')
+    }
+    user.password=newpass
+    return user
+
+}
+
 userSchema.pre('save',async function(next){
     const user= this
     if(user.password.includes('password'))

@@ -72,6 +72,17 @@ orgSchema.statics.findByCredentials= async function(email,pass){
     return org
 }
 
+    orgSchema.methods.changePassword=async function(oldpass,newpass){
+    const org=this
+    const isMatch = await bcrypt.compare(oldpass,org.password)
+    if(!isMatch)
+    {
+        throw new Error('Old password is wrong')
+    }
+    org.password=newpass
+    return org
+
+}
 
 orgSchema.methods.addPlace=async function(x)
 {

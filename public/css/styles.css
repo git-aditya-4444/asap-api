@@ -2,7 +2,7 @@
 
 .bg {
     /* The image used */
-    background-image: url('/images/Hydrogen.jpg');
+    background-image: url('../images/Hydrogen.jpg');
 
   /* Set rules to fill background */
   min-height: 100%;
@@ -18,6 +18,19 @@
   left: 0;
 }
 
+.bg-spl{
+    /* The image used */
+    background-image: url('/images/back.jpg');
+
+    /* Full height */
+    top:0;
+    bottom:0;
+    padding:50px;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
 .effect{
     background-color: rgba(245, 244, 244,0.2);
@@ -221,7 +234,21 @@ td:hover .del{
     color:white;
     display:inline;
 }
+/*--------------manage places-------------------------------------*/
+.reset{
+    display:none;
+    border-radius: 25px;
+    margin-right:10px
+}
 
+.litem:hover .reset{
+    display:inline;
+    float:right;
+}
+
+.reset:active{
+    transform: translateY(2px);
+}
 
 
 

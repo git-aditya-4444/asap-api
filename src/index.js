@@ -6,6 +6,7 @@ const path=require('path')
 const session=require('express-session')
 const userrouter=require('./routers/userRouter')
 const orgrouter=require('./routers/orgRouter')
+const scanrouter=require('./routers/scannerRouter')
 const Otp=require('../src/models/otp')
 
 //initializing application
@@ -32,6 +33,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(express.static(publicpath))
 app.use(userrouter)
+app.use(scanrouter)
 app.use(orgrouter)
 
 
@@ -46,9 +48,10 @@ app.get('/logout',(req,res)=>{
             return res.redirect('/home')
         }
         res.clearCookie('idk')
-        res.render('logoutpage')
+        res.redirect('/')
     })
 })
+
 
 
 

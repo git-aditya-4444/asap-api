@@ -8,7 +8,11 @@ const toLogin =async(req,res,next)=>{
 const toHome =async(req,res,next)=>{
     if(req.session.adminID)
     {
-        return res.redirect(`/home/admin/${req.session.admin_name}`)
+        return res.redirect(`/home/admin`)
+    }    
+    if(req.session.userID)
+    {
+        return res.redirect(`/home/user`)
     }
     next()
 }
@@ -16,7 +20,7 @@ const toHome =async(req,res,next)=>{
 const denied=async(req,res,next)=>{
     if(!req.session.adminID)
     {
-        return res.redirect('/login/staff')
+        return res.redirect('/login/scanner')
     }
     next()
 }

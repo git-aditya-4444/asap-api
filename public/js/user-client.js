@@ -1,5 +1,5 @@
 setInterval(function() {
-    fetch('/places', {method: 'GET'})
+    fetch('/places/userUI', {method: 'GET'})
       .then(function(response) {
         if(response.ok) return response.json()
         throw new Error('Request failed.');
@@ -10,7 +10,6 @@ setInterval(function() {
         })
       })
       .catch(function(error) {
-        console.log('error');
       });
   }, 1000);
 
@@ -30,27 +29,44 @@ setInterval(function() {
         }
       })
       .catch(function(error) {
-        console.log(error);
       });
   }, 1000); 
 
 const exitbtn=document.getElementById('exit-btn')
-exitbtn.addEventListener('click',function(){
-  fetch('/exit', {method: 'DELETE'})
-  .then(function(response) {
-    if(response.ok)
-    {
-     
-      document.getElementById('generate-btn').classList.remove('view')
-      document.getElementById('place-list').classList.remove('view')
-      document.getElementById('exit-btn').classList.add('view')
-      location.reload()
-      return;
-    }
-    throw new Error('failed.');
+if(exitbtn !== null){
+  exitbtn.addEventListener('click',function(){
+    fetch('/exit', {method: 'DELETE'})
+    .then(function(response) {
+      if(response.ok)
+      {
+       
+        document.getElementById('generate-btn').classList.remove('view')
+        document.getElementById('place-list').classList.remove('view')
+        document.getElementById('exit-btn').classList.add('view')
+        location.reload()
+        return;
+      }
+      throw new Error('failed.');
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
   })
-  .catch(function(error) {
-    console.log(error);
-  });
-})
+}
+
+
+const delacc=document.getElementById('delacc-btn')
+if(delacc !== null)
+{
+  delacc.addEventListener('click',()=>{
+    console.log("clicked")
+    fetch('/user/account',{method:'DELETE'})
+    .then((res)=>{
+      location.replace('/')
+    }).catch((res)=>{
+      console.log('not ok')
+    })
+  })
+}
+
 

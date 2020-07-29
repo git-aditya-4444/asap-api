@@ -21,6 +21,9 @@
                     <a class="nav-link " href="/home/admin">Home</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/admin/account">Account</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/manage/requests">Manage</a>
                 </li>
                 <li class="nav-item">
@@ -37,21 +40,10 @@
                 {{#each places}}
                     <div style="" class="col-6 item-effect">
                         <div class="h1">{{this.name}}</div>
-                        <div class="h4">{{this.count}}</div>
+                        <div class="h4" id="{{this._id}}">{{this.count}}</div>
                     </div>
                 {{/each}}
-                {{!-- <div class="col-6 item-effect">
-                    <div class="h1">Mess</div>
-                    <div class="h5">123</div>
-                </div>
-                <div class="col-6 item-effect">
-                    <div class="h1">Canteen</div>
-                    <div class="h5">23</div>
-                </div>
-                <div class="col-6 item-effect">
-                    <div class="h1">Mess</div>
-                    <div class="h5">123</div>
-                </div> --}}
+
                 <div class="col-6">
                     <button class="fa fa-plus m-3 btn btn-outline-light  ikon" data-toggle="modal" data-target="#addplace"></button>
                 </div>
@@ -83,5 +75,5 @@
 
     </div>
 </body>
-
+<script src="/js/org-client.js"></script>
 </html>

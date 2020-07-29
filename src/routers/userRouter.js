@@ -2,13 +2,13 @@ const express = require('express')
 const User=require('../models/user')
 const Otp=require('../models/otp')
 const Org=require('../models/org')
-const {toLogin,toHome}=require('../authenticate/userAuth')
+const {toLogin,toHome,toRoot}=require('../authenticate/userAuth')
 const {genOTP,createArr} = require('../functions')
 
 const router = new express.Router()
 
 
-//REGISTER USER----------------------------------------------------------------------------
+//############################################## register USER
 router.get('/register/user',toHome,async (req,res)=>{
 try{
     //for list of orgs
@@ -29,10 +29,21 @@ router.post('/register/user',toHome,async (req,res)=>{
     try{
         const user = new User(req.body)
         await user.save()
-        res.send('wait for approval')
+        res.render('rootpage',{msg:"please wait for the aproval from the admin"})
     }catch(e)
     {
-        res.send(e)
+        if(Object.keys(e.keyPattern).includes('email'))
+        {
+            const org=await Org.find({})
+            let list=[]
+            org.forEach((x)=>{
+                ({_id,name}=x)
+                list.push({_id,name})
+            })
+            return res.render('userSignup',{list,err:'email ID has already been taken'})
+        }
+        
+        res.render('userSignup')
     }
 })
 
@@ -98,44 +109,51 @@ router.post('/home/user',toLogin,async(req,res)=>{
     res.redirect('/home/user')
 })
 
-
-router.get('/places',async(req,res)=>{
-try{
-const id=req.session.userID
-const {belongsTo:orgid}=await User.findById(id)
-const org=await Org.findById(orgid)
-const places=org.places
-res.send(places)
-}catch(e)
-{
-    res.send(e)
-}
+router.get('/user/account',toLogin,async(req,res)=>{
+    res.render('accountsettings')
 })
 
-router.get('/inside',async(req,res)=>{
-    const id=req.session.userID
-    const otp=await Otp.findOne({user:id})
-    if(otp !== null)
-    {
-        return res.send(otp)
+//################################################### account settings
+router.post('/user/account',toLogin,async(req,res)=>{
+    try{
+        if(req.body.new !== req.body.new2)
+        {
+            throw new Error('passwords did not match')
+        }
+        const user=await User.findById(req.session.userID)
+        await user.changePassword(req.body.old,req.body.new)
+        user.save()
+        res.render('accountsettings',{okay:"changed successfully"})
+    }catch(e){
+        res.render('accountsettings',{msg:e.toString().split(": ")[1]})
     }
+})
+
+
+router.delete('/user/account',async(req,res)=>{
+    await User.findByIdAndDelete(req.session.userID)
+    req.session.destroy( (err) => {
+    res.clearCookie('idk')
+    res.status(200)
+    res.send('ok')
+       })
     
 })
 
-router.delete('/exit',async(req,res)=>{
-try{
-    console.log('hiiii')
-    const deleted=await Otp.findOneAndDelete({user:req.session.userID})
-    const updated=await Org.updateOne({'places._id':deleted.place},{$inc:{
-        'places.$.count':-1
-    }})
-    console.log(updated)
-    res.send("hi")
-}catch(e){
-res.send(e)
-}
-})
 
+//active info
+router.get('/places/userUI',async(req,res)=>{
+    try{
+    const id=req.session.userID
+    const {belongsTo:orgid}=await User.findById(id)
+    const org=await Org.findById(orgid)
+    const places=org.places
+    res.send(places)
+    }catch(e)
+    {
+        res.send(e)
+    }
+    })
 
 
 module.exports = router  
