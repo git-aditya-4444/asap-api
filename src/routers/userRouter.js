@@ -109,11 +109,13 @@ router.post('/home/user',toLogin,async(req,res)=>{
     res.redirect('/home/user')
 })
 
+
+
+//################################################### account settings
 router.get('/user/account',toLogin,async(req,res)=>{
     res.render('accountsettings')
 })
 
-//################################################### account settings
 router.post('/user/account',toLogin,async(req,res)=>{
     try{
         if(req.body.new !== req.body.new2)

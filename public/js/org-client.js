@@ -113,5 +113,18 @@ if(for_reset_btn){
   })
 }
 
+const delacc=document.getElementById('delacc-btn')
+if(delacc !== null)
+{
+  delacc.addEventListener('click',()=>{
+    console.log("clicked")
+    fetch('/admin/account',{method:'DELETE'})
+    .then((res)=>{
+      location.replace('/')
+    }).catch((res)=>{
+      console.log('not ok')
+    })
+  })
+}
 
                                                    

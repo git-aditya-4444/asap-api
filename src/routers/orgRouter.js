@@ -142,7 +142,16 @@ router.post('/admin/account',toLogin,async(req,res)=>{
     }
 })
 
-
+router.delete('/admin/account',async(req,res)=>{
+    const user=await User.deleteMany({belongsTo:req.session.adminID})
+    await Org.findByIdAndDelete(req.session.adminID)
+    req.session.destroy( (err) => {
+    res.clearCookie('idk')
+    res.status(200)
+    res.send('ok')
+       })
+    
+})
 
 //active info
 router.get('/places/adminUI',async(req,res)=>{

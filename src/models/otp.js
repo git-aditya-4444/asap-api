@@ -19,8 +19,14 @@ const otpSchema = new mongoose.Schema({
     active:{
         type:Boolean,
         default:false
-    }
+    },
+    createdAt:{ 
+        type: Date, 
+        expires: 60*5, 
+        default: Date.now }
 })
+
+
 
 otpSchema.pre('save',async function(next){
     const otp=this
