@@ -56,14 +56,24 @@ router.post('/login/user',toHome,async(req,res)=>{
 try{
     ({email,password}=req.body)
     const user=await User.findByCredentials(email,password)
-    if(user.access){
-        req.session.userID=user._id
-        req.session.user_name=user.name
-        return res.redirect('/home/user')
+    if(user)
+    {
+        if(user.access){
+            req.session.userID=user._id
+            req.session.user_name=user.name
+            req.session.belongsTo=user.belongsTo
+            return res.redirect('/home/user')
+        }
+        else{
+            throw new Error("Admin did not approve yet")
+        }
+    }else{
+        throw new Error("Invalid User/password")
+
     }
-    res.send('not permitted.Admin needs to accept you request to join.')
+    
 }catch(e){
-    res.render('login',{uactive:'activee',role:'USER',error:'Username/Password is wrong.'})
+    res.render('login',{uactive:'activee',role:'USER',error:e.toString().split(": ")[1]})
 }
 })
 
@@ -104,7 +114,7 @@ router.post('/home/user',toLogin,async(req,res)=>{
         OTP=genOTP()
     }
 
-    const otp=new Otp({...place,value:OTP,user:req.session.userID})
+    const otp=new Otp({...place,value:OTP,user:req.session.userID,org:req.session.belongsTo})
     await otp.save()
     res.redirect('/home/user')
 })

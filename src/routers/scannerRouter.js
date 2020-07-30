@@ -55,7 +55,7 @@ router.get('/manage/scanner',toLogin,async (req,res)=>{
 
 router.post('/login/scanner',async(req,res)=>{
 try{
-    const there=await Scanner.findOne(req.body)
+    const there=await Scanner.findOne(req.body)//{col1:value,col2:value}
     if(there){
         req.session.adminID=there.belongsTo
         req.session.scanning=there.scanning
@@ -88,25 +88,34 @@ res.send(e)
 
 router.post('/scanner',denied,async(req,res)=>{
 try{
-    const there=await Otp.findOne(req.body)
+    const {value}=req.body
+    const there=await Otp.findOne({value,active:false}) 
     if(there)
     {
-        const updated=await Org.updateOne({'places._id':req.session.scanning},{$inc:{
-            'places.$.count':1
-        }})
-
-        const activeotp=await Otp.findOneAndUpdate({value:req.body.value},{$set:{active:true}})
-        
-        const org=await Org.findById(req.session.adminID)
-        const place=org.places.find(x=>x._id==req.session.scanning)
+        if(there.place.toString() === req.session.scanning.toString())
+        {
+            console.log('yess')
+            await Org.updateOne({'places._id':req.session.scanning},{$inc:{
+                'places.$.count':1
+            }})//update count
+            await Otp.findOneAndUpdate({value:req.body.value},{$set:{active:true}}) //set OTP to active
+            const org=await Org.findById(req.session.adminID)
+            const place=org.places.find(x=>x._id==req.session.scanning)
         return res.render('scanner',{place,err:"Access Granted",bg:"bg-success"})
+        }else{
+            throw new Error("Access denied")
+        }
+        
+        
+        
+
     }
-    throw new Error()
+    throw new Error("User already at a Place")
 }catch(e)
 {
     const org=await Org.findById(req.session.adminID)
     const place=org.places.find(x=>x._id==req.session.scanning)
-    return res.render('scanner',{place,err:"Access Denied",bg:"bg-danger"}) 
+    return res.render('scanner',{place,err:e.toString().split(": ")[1],bg:"bg-danger"}) 
 }
 })
 

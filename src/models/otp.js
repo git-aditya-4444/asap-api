@@ -16,14 +16,15 @@ const otpSchema = new mongoose.Schema({
         required:true,
         ref:'User'
     },
+    org:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'Orh'
+    },
     active:{
         type:Boolean,
         default:false
-    },
-    createdAt:{ 
-        type: Date, 
-        expires: 60*5, 
-        default: Date.now }
+    }
 })
 
 

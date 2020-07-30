@@ -143,7 +143,8 @@ router.post('/admin/account',toLogin,async(req,res)=>{
 })
 
 router.delete('/admin/account',async(req,res)=>{
-    const user=await User.deleteMany({belongsTo:req.session.adminID})
+    const del_otps=await Otp.deleteMany({org:req.session.adminID})
+    const del_users=await User.deleteMany({belongsTo:req.session.adminID})
     await Org.findByIdAndDelete(req.session.adminID)
     req.session.destroy( (err) => {
     res.clearCookie('idk')

@@ -73,16 +73,6 @@
 
 
 
-.button-effect{
-    border-radius:25px;
-    transition:1s;
-}
-
-.button-effect:hover{
-
-    color:white;
-    background-image: linear-gradient(4deg,rgba(251, 191, 180,0.6), rgba(243, 125, 134,0.6));
-}
 
 
 /*------------signup---------------*/
