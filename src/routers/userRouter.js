@@ -87,7 +87,7 @@ try{
     res.render('userUI',{places})
     
 }catch(e){
-    res.send('error')
+    res.redirect('/')
 }
 })
 
